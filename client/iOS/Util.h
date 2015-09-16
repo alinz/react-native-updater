@@ -1,2 +1,0 @@
-@interface Util : NSObject
-@end

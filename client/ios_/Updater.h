@@ -2,6 +2,8 @@
 
 @interface Updater : NSObject
 
++ (id)instanceWithModuleName:(NSString *)moduleName;
+
 - (id) initWithModuleName:(NSString *)moduleName;
 - (void) launchUpdaterApp;
 - (void) launchMainApp;
