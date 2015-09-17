@@ -1,19 +1,23 @@
 @class RCTRootView;
-@class UIView;
 
-typedef void (^CompletionTaskBlock)(RCTRootView *);
+typedef void (^UpdateRootViewBlock)(RCTRootView *);
+typedef void (^SucceedBlock)();
+typedef void (^FailedBlock)(NSError *);
 
 @interface Updater : NSObject
 
-@property (atomic, strong) CompletionTaskBlock beforeUpdaterLaunch;
-@property (atomic, strong) CompletionTaskBlock beforeMainAppLaunch;
+@property (atomic, strong) UpdateRootViewBlock beforeUpdaterLaunch;
+@property (atomic, strong) UpdateRootViewBlock beforeMainAppLaunch;
 
-+ (id)instanceWithModuleName:(NSString *)moduleName;
++ (id)instance;
 
 - (id)initWithModuleName:(NSString *)moduleName;
 - (void)launchUpdaterApp;
 - (void)launchMainApp;
+- (void)downloadMainAppFromURL:(NSURL *) url
+              withSucceedBlock:(SucceedBlock)succeedBlock
+                andFailedBlock:(FailedBlock)failedBlock ;
 
-- (UIView *)view;
+- (id)view;
 
 @end
