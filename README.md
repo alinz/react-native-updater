@@ -5,3 +5,7 @@ Open source version of AppHub!
 <p align="center">
     <img src ="http://oi60.tinypic.com/atw8jl.jpg" />
 </p>
+
+
+## License
+BSD

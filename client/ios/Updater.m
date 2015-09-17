@@ -1,3 +1,9 @@
+/*
+ * BSD License
+ * Copyright (c) 2015, Ali Najafizadeh.
+ * All rights reserved.
+ */
+ 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
@@ -128,13 +134,13 @@ static Updater *updaterInstance = nil;
 - (NSString *)loadFileFromDocuments:(NSString *)filename {
   NSString *content = nil;
   NSURL *path = [self localURLForFilename:filename];
-  
+
   if ([[NSFileManager defaultManager] fileExistsAtPath:[path path]]) {
     content = [NSString stringWithContentsOfFile:[path path]
                                         encoding:NSUTF8StringEncoding
                                            error:NULL];
   }
-  
+
   return content;
 }
 
@@ -143,30 +149,30 @@ static Updater *updaterInstance = nil;
   NSString *ext = [filename pathExtension];
   NSURL *path = [[NSBundle mainBundle] URLForResource:[filename stringByDeletingPathExtension]
                                         withExtension:ext];
-  
+
   if ([[NSFileManager defaultManager] fileExistsAtPath:[path path]]) {
     content = [NSString stringWithContentsOfFile:[path path]
                                         encoding:NSUTF8StringEncoding
                                            error:NULL];
   }
-  
+
   return content;
 }
 
 - (NSString *)loadCurrentVersion {
   NSString *versionFileName = @"bundle.version";
   NSString *version = nil;
-  
+
   version = [self loadFileFromDocuments: versionFileName];
-  
+
   if (version == nil) {
     version = [self loadFileFromBundle:versionFileName];
   }
-  
+
   if (version == nil) {
     NSLog(@"Error, your app doesn't have bundle.version in neither bundle nor documents");
   }
-  
+
   return version;
 }
 

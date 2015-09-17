@@ -1,3 +1,9 @@
+/*
+ * BSD License
+ * Copyright (c) 2015, Ali Najafizadeh.
+ * All rights reserved.
+ */
+
 var React = require('react-native');
 var {
   Component,

@@ -1,3 +1,9 @@
+/*
+ * BSD License
+ * Copyright (c) 2015, Ali Najafizadeh.
+ * All rights reserved.
+ */
+ 
 #import "UpdaterManager.h"
 #import "Updater.h"
 
