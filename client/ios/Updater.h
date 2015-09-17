@@ -18,6 +18,9 @@ typedef void (^FailedBlock)(NSError *);
               withSucceedBlock:(SucceedBlock)succeedBlock
                 andFailedBlock:(FailedBlock)failedBlock ;
 
+- (NSString *)loadCurrentVersion;
+- (void)saveVersionAsCurrent:(NSString*)version;
+
 - (id)view;
 
 @end

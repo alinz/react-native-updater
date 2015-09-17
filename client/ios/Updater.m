@@ -43,7 +43,7 @@ static Updater *updaterInstance = nil;
       NSURL *bundleURL = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
       UIViewController *updaterViewController = [self rootViewWithModuleName:@"Updater"
                                                                    bundleURL:bundleURL];
-      [_navigator pushViewController:updaterViewController animated:NO];
+      [_navigator pushViewController:updaterViewController animated:YES];
     } else {
       [_navigator popViewControllerAnimated:YES];
     }
@@ -54,12 +54,12 @@ static Updater *updaterInstance = nil;
   //make sure that the following code inside block executed by main thread. React-Native's requirement!
   dispatch_async(dispatch_get_main_queue(), ^{
     if ([_navigator.viewControllers count] == 1) {
-      NSURL *bundleURL = [self savedMainAppPathAsURL];
+      NSURL *bundleURL = [self localURLForFilename:@"main.jsbundle"];
       UIViewController *updaterViewController = [self rootViewWithModuleName:_moduleName
                                                                    bundleURL:bundleURL];
-      [_navigator pushViewController:updaterViewController animated:NO];
+      [_navigator pushViewController:updaterViewController animated:YES];
     } else {
-      NSLog(@"Error: either updater is not launched or main app is already launched.");
+      NSLog(@"Warning: either updater is not launched or main app is already launched.");
     }
   });
 }
@@ -109,20 +109,74 @@ static Updater *updaterInstance = nil;
 }
 
 - (void)saveUpdateBundleWithData:(NSData *)data {
-  NSString *url = [[self savedMainAppPathAsURL] path];
+  NSString *url = [[self localURLForFilename:@"main.jsbundle"] path];
   [data writeToFile:url atomically:YES];
 }
 
-- (NSURL *)savedMainAppPathAsURL {
+- (NSURL *)localURLForFilename:(NSString *)filename {
   NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,  NSUserDomainMask, YES);
   NSString *documentsDirectory = [paths objectAtIndex:0];
-  NSString *appFile = [documentsDirectory stringByAppendingPathComponent:@"main.jsbundle"];
+  NSString *appFile = [documentsDirectory stringByAppendingPathComponent:filename];
 
   appFile = [NSString stringWithFormat:@"file://%@", appFile];
 
   NSURL* bundleURL = [NSURL URLWithString:appFile];
 
   return bundleURL;
+}
+
+- (NSString *)loadFileFromDocuments:(NSString *)filename {
+  NSString *content = nil;
+  NSURL *path = [self localURLForFilename:filename];
+  
+  if ([[NSFileManager defaultManager] fileExistsAtPath:[path path]]) {
+    content = [NSString stringWithContentsOfFile:[path path]
+                                        encoding:NSUTF8StringEncoding
+                                           error:NULL];
+  }
+  
+  return content;
+}
+
+- (NSString *)loadFileFromBundle:(NSString *)filename {
+  NSString *content = nil;
+  NSString *ext = [filename pathExtension];
+  NSURL *path = [[NSBundle mainBundle] URLForResource:[filename stringByDeletingPathExtension]
+                                        withExtension:ext];
+  
+  if ([[NSFileManager defaultManager] fileExistsAtPath:[path path]]) {
+    content = [NSString stringWithContentsOfFile:[path path]
+                                        encoding:NSUTF8StringEncoding
+                                           error:NULL];
+  }
+  
+  return content;
+}
+
+- (NSString *)loadCurrentVersion {
+  NSString *versionFileName = @"bundle.version";
+  NSString *version = nil;
+  
+  version = [self loadFileFromDocuments: versionFileName];
+  
+  if (version == nil) {
+    version = [self loadFileFromBundle:versionFileName];
+  }
+  
+  if (version == nil) {
+    NSLog(@"Error, your app doesn't have bundle.version in neither bundle nor documents");
+  }
+  
+  return version;
+}
+
+- (void)saveVersionAsCurrent:(NSString*)version {
+  NSString *versionFileName = @"bundle.version";
+  NSURL *path = [self localURLForFilename:versionFileName];
+  [version writeToFile:[path path]
+            atomically:YES
+              encoding:NSUTF8StringEncoding
+                 error:nil];
 }
 
 @end

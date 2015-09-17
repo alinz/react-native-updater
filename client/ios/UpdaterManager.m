@@ -18,15 +18,29 @@ RCT_EXPORT_METHOD(launchMainApp)
 }
 
 RCT_EXPORT_METHOD(downloadUpdate:(NSString *)path
-             withSucceedCallback:(RCTResponseSenderBlock)succeed
-               andFailedCallback:(RCTResponseErrorBlock)failed)
+             withSucceedCallback:(RCTPromiseResolveBlock)resolve
+               andFailedCallback:(RCTPromiseRejectBlock)reject)
 {
   NSURL *url = [NSURL URLWithString:path];
   Updater *updater = [Updater instance];
   [updater downloadMainAppFromURL:url
-                 withSucceedBlock: ^{ succeed(@[]); }
+                 withSucceedBlock: ^{ resolve(@[]); }
                    andFailedBlock: ^(NSError *error) {
-                     failed(error);
+                     reject(error);
                    }];
+}
+
+RCT_EXPORT_METHOD(localVersion:(RCTPromiseResolveBlock)resolve
+                      rejecter:(RCTPromiseRejectBlock)reject)
+{
+  Updater *updater = [Updater instance];
+  NSString *currentVersion = [updater loadCurrentVersion];
+  resolve(currentVersion);
+}
+
+RCT_EXPORT_METHOD(saveVersion:(NSString *)version)
+{
+  Updater *updater = [Updater instance];
+  [updater saveVersionAsCurrent:version];
 }
 @end
