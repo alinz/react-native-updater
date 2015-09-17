@@ -14,7 +14,7 @@ const {
 
 const platform = 'ios';
 
-function versionToString(version, options) {
+function versionToString(version) {
   const { major, minor, patch } = version;
   return `${major}.${minor}.${patch}`;
 }
@@ -119,7 +119,7 @@ class UpdaterComponent extends Component {
     return foundRelease;
   }
 
-  async _process() {
+  async process() {
     try {
       const localVersion = await this._getLocalVersion();
       const releases = await this._getReleases();
@@ -137,6 +137,29 @@ class UpdaterComponent extends Component {
     } catch(e) {
       console.log(e);
     }
+  }
+
+  _downloadBundle(path) {
+    return new Promise((resolve, reject) => {
+      UpdaterManager.downloadUpdate(path, resolve, reject);
+    });
+  }
+
+  async downloadAndUpdateBundle(version) {
+    const rootPath = this._getBundleURLFor(version);
+    //TODO: in the future, we can start downloading images as well
+    //bundlePath
+    const bundlePath = `${rootPath}/main.jsbundle`;
+
+    //download and save the bundle to local
+    await this._downloadBundle(bundlePath);
+
+    //save the download version
+    UpdaterManager.saveVersion(versionToString(version));
+  }
+
+  runMainApp() {
+    UpdaterManager.launchMainApp();
   }
 
   render() {
