@@ -75,7 +75,6 @@ class UpdaterComponent extends Component {
   }
 
   _compilePattern(versionPattern) {
-    console.log("#####", versionPattern);
     const match = /^(x|\*)\.(x|\*)\.(x|\*)$/.exec(versionPattern);
     return {
       major: match[1] !== 'x',
