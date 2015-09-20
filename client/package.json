@@ -1,8 +1,30 @@
 {
   "name": "react-native-updater",
   "version": "0.0.1",
-  "author": {
-    "name": "Ali Najafizadeh",
-    "website": "github.com/alinz"
-  }
+  "description": "an open source version of AppHub!",
+  "main": "jsx/index.js",
+  "directories": {
+    "example": "example"
+  },
+  "peerDependencies": {
+    "react-native": ">= 0.10.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:alinz/react-native-updater.git"
+  },
+  "keywords": [
+    "react-native",
+    "react-component",
+    "app update"
+  ],
+  "author": "Ali Najafizadeh",
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/alinz/react-native-updater/issues"
+  },
+  "homepage": "https://github.com/alinz/react-native-updater"
 }
