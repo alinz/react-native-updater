@@ -9,18 +9,26 @@ import (
 	"github.com/alinz/react-native-updater/server/api/bundles"
 	"github.com/alinz/react-native-updater/server/api/releases"
 	"github.com/alinz/react-native-updater/server/config"
+	"github.com/alinz/react-native-updater/server/lib/crypto"
 	"github.com/alinz/react-native-updater/server/lib/logme"
 	"github.com/pressly/cji"
 	"github.com/zenazn/goji/graceful"
 )
 
 var (
-	flags      = flag.NewFlagSet("server", flag.ExitOnError)
-	configFile = flags.String("config", "", "path to configuration file")
+	flags       = flag.NewFlagSet("server", flag.ExitOnError)
+	configFile  = flags.String("config", "", "path to configuration file")
+	generateKey = flags.Int("generate", -1, "generate key with size")
 )
 
 func main() {
 	flags.Parse(os.Args[1:])
+
+	//genearating public and private keys
+	if *generateKey != -1 {
+		crypto.Generate(*generateKey, "../key")
+		return
+	}
 
 	if *configFile == "" {
 		*configFile = os.Getenv("CONFIG")
