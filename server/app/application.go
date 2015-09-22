@@ -1,1 +1,5 @@
 package app
+
+func init() {
+
+}
