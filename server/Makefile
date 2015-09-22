@@ -11,3 +11,6 @@ deps:
 build:
 	@mkdir -p ./bin
 	cd cmd && GOGC=off go build -i -o ../bin/updater-server
+
+dev:
+	@(export CONFIG=$$PWD/etc/server.conf && cd ./main && fresh -c ../etc/fresh-runner.conf -w=../)
