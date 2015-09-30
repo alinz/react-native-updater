@@ -11,6 +11,7 @@ import (
 	"github.com/alinz/react-native-updater/server/config"
 	"github.com/alinz/react-native-updater/server/lib/crypto"
 	"github.com/alinz/react-native-updater/server/lib/logme"
+	"github.com/alinz/react-native-updater/server/middleware"
 	"github.com/pressly/cji"
 	"github.com/zenazn/goji/graceful"
 )
@@ -43,6 +44,10 @@ func main() {
 
 	route := cji.NewRouter()
 
+	//global middlewares
+	route.Use(middleware.LogHTTP)
+
+	//global handlers
 	route.Mount("/bundles", bundles.New())
 	route.Mount("/releases", releases.New())
 
