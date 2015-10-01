@@ -6,6 +6,8 @@ import (
 	"crypto/cipher"
 	"crypto/rand"
 	"crypto/sha1"
+	"encoding/base64"
+	"encoding/binary"
 	"fmt"
 	"io"
 )
@@ -109,4 +111,40 @@ func Decrypt(data, key []byte, withHash bool) ([]byte, error) {
 	}
 
 	return decrypted, nil
+}
+
+func EncryptSecureInt64(value int64, key []byte) ([]byte, error) {
+	data := make([]byte, 8)
+
+	binary.PutVarint(data, value)
+
+	encrypted, err := Encrypt(data, key, true)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return encrypted, nil
+}
+
+func DecryptSecureInt64(data, key []byte) (int64, error) {
+	decrypted, err := Decrypt(data, key, true)
+
+	if err != nil {
+		return 0, err
+	}
+
+	value, _ := binary.Varint(decrypted)
+
+	return value, nil
+}
+
+func EncryptSecureInt64AsBase64(value int64, key []byte) (string, error) {
+	encrypted, err := EncryptSecureInt64(value, key)
+
+	if err != nil {
+		return "", err
+	}
+
+	return base64.StdEncoding.EncodeToString(encrypted), nil
 }
