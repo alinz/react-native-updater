@@ -4,20 +4,11 @@ import (
 	"bytes"
 	"crypto/aes"
 	"crypto/cipher"
+	"crypto/rand"
 	"crypto/sha1"
 	"fmt"
-	"math/rand"
-	"time"
+	"io"
 )
-
-var letters = []byte("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
-
-func randVI(b []byte) {
-	length := len(letters)
-	for i := range b {
-		b[i] = letters[rand.Intn(length)]
-	}
-}
 
 func encryptAESCFB(dst, src, key, iv []byte) error {
 	aesBlockEncrypter, err := aes.NewCipher([]byte(key))
@@ -41,6 +32,7 @@ func decryptAESCFB(dst, src, key, iv []byte) error {
 	return nil
 }
 
+//Encrypt bytes of data with key
 func Encrypt(data, key []byte, withHash bool) ([]byte, error) {
 	//key must be 16, 24 or 32 bytes
 	keyLen := len(key)
@@ -58,7 +50,13 @@ func Encrypt(data, key []byte, withHash bool) ([]byte, error) {
 	}
 
 	encrypted := make([]byte, aes.BlockSize+len(data)+len(hash))
-	randVI(encrypted[:aes.BlockSize])
+	//randVI(encrypted[:aes.BlockSize])
+
+	io.ReadFull(rand.Reader, encrypted[:aes.BlockSize])
+
+	if _, err := io.ReadFull(rand.Reader, encrypted[:aes.BlockSize]); err != nil {
+		return nil, fmt.Errorf("something went wrong with generating new IV")
+	}
 
 	var source []byte
 
@@ -80,6 +78,7 @@ func Encrypt(data, key []byte, withHash bool) ([]byte, error) {
 	return encrypted, nil
 }
 
+//Decrypt bytes of data with key
 func Decrypt(data, key []byte, withHash bool) ([]byte, error) {
 	//key must be 16, 24 or 32 bytes
 	keyLen := len(key)
@@ -110,8 +109,4 @@ func Decrypt(data, key []byte, withHash bool) ([]byte, error) {
 	}
 
 	return decrypted, nil
-}
-
-func init() {
-	rand.Seed(time.Now().UnixNano())
 }
