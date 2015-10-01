@@ -146,5 +146,20 @@ func EncryptSecureInt64AsBase64(value int64, key []byte) (string, error) {
 		return "", err
 	}
 
-	return base64.StdEncoding.EncodeToString(encrypted), nil
+	return base64.URLEncoding.EncodeToString(encrypted), nil
+}
+
+func DecryptSecureInt64FromBase64(value string, key []byte) (int64, error) {
+	encrypted, err := base64.URLEncoding.DecodeString(value)
+
+	if err != nil {
+		return 0, err
+	}
+
+	result, err := DecryptSecureInt64(encrypted, key)
+	if err != nil {
+		return 0, err
+	}
+
+	return result, nil
 }

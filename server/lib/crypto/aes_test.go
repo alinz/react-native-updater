@@ -1,6 +1,7 @@
 package crypto_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/alinz/react-native-updater/server/lib/crypto"
@@ -44,6 +45,22 @@ func TestDecryptSecureInt64(t *testing.T) {
 	assert.Equal(t, err, nil, err)
 
 	decryptedValue, err := crypto.DecryptSecureInt64(encrypted, key)
+
+	assert.Equal(nil, err, err)
+	assert.Equal(t, value, decryptedValue, "should be the same")
+}
+
+func TestDecryptSecureInt64Base64(t *testing.T) {
+	value := int64(876545)
+	key := []byte("123456789012345678901234")
+
+	encryptedBase64, err := crypto.EncryptSecureInt64AsBase64(value, key)
+
+	fmt.Printf("encrupted: %v\n", encryptedBase64)
+
+	assert.Equal(t, err, nil, err)
+
+	decryptedValue, err := crypto.DecryptSecureInt64FromBase64(encryptedBase64, key)
 
 	assert.Equal(nil, err, err)
 	assert.Equal(t, value, decryptedValue, "should be the same")
