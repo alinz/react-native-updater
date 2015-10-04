@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"os"
 	"syscall"
 	"time"
@@ -9,6 +10,7 @@ import (
 	"github.com/alinz/react-native-updater/server/api/bundles"
 	"github.com/alinz/react-native-updater/server/api/releases"
 	"github.com/alinz/react-native-updater/server/config"
+	"github.com/alinz/react-native-updater/server/data"
 	"github.com/alinz/react-native-updater/server/lib/crypto"
 	"github.com/alinz/react-native-updater/server/lib/logme"
 	"github.com/alinz/react-native-updater/server/middleware"
@@ -41,6 +43,22 @@ func main() {
 		logme.Warn("configuration file is not found", *configFile)
 		logme.Fatal(err)
 	}
+
+	//connecting to Database
+	dbConfig := configuration.DB
+	dbURL := data.BuildDbURL(
+		dbConfig.Username,
+		dbConfig.Password,
+		dbConfig.Hosts,
+		dbConfig.Database,
+	)
+
+	db, err := data.NewDB(dbURL)
+	if err != nil {
+		panic(err)
+	}
+	//TODO: remove this section
+	fmt.Printf("%v\n", db)
 
 	route := cji.NewRouter()
 
