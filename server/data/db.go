@@ -19,6 +19,11 @@ type Database struct {
 	Release ReleaseStore
 }
 
+var (
+	//DB a global refrence to db struct
+	DB *Database
+)
+
 //BuildDbURL creates a URL postgress URL as string
 func BuildDbURL(
 	username string,
@@ -44,6 +49,8 @@ func NewDB(dbURL string) (*Database, error) {
 
 	db.App = AppStore{Store: db.Store(`apps`)}
 	db.Release = ReleaseStore{Store: db.Store(`releases`)}
+
+	DB = db
 
 	return db, nil
 }
