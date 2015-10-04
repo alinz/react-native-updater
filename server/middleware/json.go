@@ -7,10 +7,12 @@ import (
 	"github.com/zenazn/goji/web"
 )
 
+//StructBuilder is an interface which is used by JSONDecode to parse body to pass struct
 type StructBuilder interface {
 	BuildNew() interface{}
 }
 
+//JSONDecode tries to decode body of message to given structBuilder
 func JSONDecode(structBuilder StructBuilder) func(c *web.C, h http.Handler) http.Handler {
 	return func(c *web.C, h http.Handler) http.Handler {
 		fn := func(w http.ResponseWriter, r *http.Request) {
@@ -28,6 +30,7 @@ func JSONDecode(structBuilder StructBuilder) func(c *web.C, h http.Handler) http
 	}
 }
 
+//JSONEncode encoded response from Env to json
 func JSONEncode(c *web.C, h http.Handler) http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) {
 		var response interface{}
