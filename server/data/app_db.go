@@ -4,7 +4,7 @@ import "time"
 
 //App struct for storing the basic information about each app
 type App struct {
-	ID       int64     `db:"id,pk" json:"id"`
+	ID       SecureID  `db:"id,pk" json:"id"`
 	Name     string    `db:"name" json:"name"`
 	CreateAt time.Time `db:"cretad_at" json:"created_at"`
 }
