@@ -44,6 +44,9 @@ func main() {
 		logme.Fatal(err)
 	}
 
+	//set SecureIDKey from config
+	data.SetSecureIDKey(configuration.AES.SecureKey)
+
 	//connecting to Database
 	dbConfig := configuration.DB
 	dbURL := data.BuildDbURL(
