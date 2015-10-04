@@ -14,3 +14,6 @@ build:
 
 dev:
 	@(export CONFIG=$$PWD/etc/server.conf && cd ./main && fresh -c ../etc/fresh-runner.conf -w=../)
+
+reset-db:
+	bash scripts/db.sh

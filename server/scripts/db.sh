@@ -18,3 +18,8 @@ psql -h127.0.0.1 -U postgres <<< "CREATE DATABASE $database ENCODING 'UTF-8' LC_
 
 # create username and password
 psql -h127.0.0.1 -U postgres <<< "CREATE USER $user WITH PASSWORD '$password';"
+
+# updated schema
+cat data/schema/apps.sql | psql -h127.0.0.1 -U $user -d $database
+cat data/schema/releases.sql | psql -h127.0.0.1 -U $user -d $database
+cat data/schema/bundles.sql | psql -h127.0.0.1 -U $user -d $database

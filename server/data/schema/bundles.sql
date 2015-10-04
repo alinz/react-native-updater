@@ -1,3 +1,6 @@
+DROP TABLE IF EXISTS bundles;
+DROP SEQUENCE IF EXISTS bundle_id_seq;
+
 CREATE SEQUENCE bundle_id_seq
     START WITH 1
     INCREMENT BY 1
@@ -15,3 +18,4 @@ CREATE TABLE bundles (
 );
 
 ALTER TABLE ONLY bundles ADD CONSTRAINT bundles_pkey PRIMARY KEY (id);
+ALTER TABLE bundles ADD FOREIGN KEY ("release_id") REFERENCES releases("id") ON DELETE CASCADE ON UPDATE CASCADE;
