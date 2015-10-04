@@ -2,7 +2,7 @@ clean:
 	@rm -rf ./bin
 
 dist-tools:
-	@mkdir -p ./bin
+	go get github.com/pilu/fresh
 	go get github.com/robfig/glock
 
 deps:
