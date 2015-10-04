@@ -9,11 +9,25 @@ type Config struct {
 		Bind string `toml:"bind"`
 	} `toml:"server"`
 
-	//[key]
-	Key struct {
+	//[rsa]
+	RSA struct {
+		Passphrase  string `toml:"passphrase"`
 		PublicPath  string `toml:"public_key"`
 		PrivatePath string `toml:"private_key"`
-	} `toml:"key"`
+	} `toml:"rsa"`
+
+	//[aes]
+	AES struct {
+		SecureKey string `toml:"secure_key"`
+	} `toml:"aes"`
+
+	//[db]
+	DB struct {
+		Database string   `toml:"database"`
+		Hosts    []string `toml:"hosts"`
+		Username string   `toml:"username"`
+		Password string   `toml:"password"`
+	} `toml:"db"`
 }
 
 //New read a configuration file and returns a Config object
