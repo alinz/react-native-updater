@@ -10,7 +10,7 @@ CREATE TABLE bundles (
     release_id bigint NOT NULL,
     hash varchar(128) NOT NULL,
     name varchar(64) NOT NULL,
-    bundle_type int NOT NULL,
+    type int NOT NULL,
     created_at timestamp DEFAULT now() NOT NULL
 );
 
