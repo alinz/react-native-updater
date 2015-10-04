@@ -9,7 +9,7 @@ func New() cji.Router {
 	//middleware section
 
 	//routes
-	r.Get("/:version", bundles)
+	r.Post("/:version", bundles)
 
 	return r
 }
