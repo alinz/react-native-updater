@@ -12,5 +12,5 @@ type Release struct {
 
 //CollectionName returns collection name in database
 func (b *Release) CollectionName() string {
-	return `release`
+	return `releases`
 }
